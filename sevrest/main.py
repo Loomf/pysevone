@@ -30,11 +30,11 @@ class SevOne:
 	def search(this, method, url, sieve = None, page = None, size = 50):
 		if(page == None):
 			page = 0
-			response = this.search(url, method, page, sieve, size)
+			response = this.search(method, url, sieve, page, size)
 			results = response['content']
 			total_pages = response['totalPages']
 			for page in range(1, total_pages):
-				response = this.search(url, method, page, sieve, size)
+				response = this.search(method, url, sieve, page, size)
 				results.extend(response['content'])
 		else:
 			append = 'page=' + str(page) + '&size=' + str(size)
