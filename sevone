@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+
+import argparse
+import json
+import pysevone
+import sys
+
+command_map = {
+	"auth" : {
+		"login" : "auth"
+	},
+	"plugin" : {
+		"get" : "get_plugins"
+	}
+}
+
+cmdline = argparse.ArgumentParser()
+cmdline.add_argument("--token", action = "store", default = '', help = "Auth token (as returned by 'auth login' or generated via the SevOne GUI")
+cmdline.add_argument("object", action = "store", help = "Type of object to act upon, e.g. 'plugin' or 'auth'")
+cmdline.add_argument("action", action = "store", help = "Action to take, e.g. 'login' or 'get'")
+cmdline.add_argument("host", action = "store", help = "Host (and port, if needed) to reach the SevOne REST API")
+cmdline.add_argument("args", action = "store", nargs = argparse.REMAINDER, help = "Arguments to pass to API call")
+args = cmdline.parse_args()
+
+if(args.object not in command_map):
+	print('!!! Object type "%s" does not exist; valid objects are %s' % (args.object, command_map.keys()))
+	sys.exit(1)
+
+actions = command_map[args.object]
+if(args.action not in actions):
+	print('!!! Action "%s" does not exist for object type "%s"; valid actions are %s' % (args.action, args.object, actions.keys()))
+	sys.exit(1)
+
+func = actions[args.action]
+
+client = sevrest.SevOne('http://' + args.host + '/api/v1', token = args.token)
+result = getattr(client, func)(*args.args)
+print(json.dumps(result, indent = 4))
+
