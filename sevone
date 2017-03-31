@@ -1,9 +1,16 @@
 #!/usr/bin/env python
 
 import argparse
+try:
+	import configparser
+except:
+	import ConfigParser as configparser
 import json
-import pysevone
+import os
+import sevrest
 import sys
+
+CONFIG_FILE = os.path.join(os.path.expanduser('~'), 'sevrest.conf')
 
 command_map = {
 	"auth" : {
@@ -14,11 +21,23 @@ command_map = {
 	}
 }
 
+config = configparser.ConfigParser()
+try:
+	config.read(CONFIG_FILE)
+except:
+	pass
+if('sevone' not in config.sections()):
+	config.add_section('sevone')
+if(not config.has_option('sevone', 'host')):
+	config.set('sevone', 'host', None)
+if(not config.has_option('sevone', 'token')):
+	config.set('sevone', 'token', '')
+
 cmdline = argparse.ArgumentParser()
-cmdline.add_argument("--token", action = "store", default = '', help = "Auth token (as returned by 'auth login' or generated via the SevOne GUI")
+cmdline.add_argument("--token", action = "store", default = config.get('sevone', 'token'), help = "Auth token (as returned by 'auth login' or generated via the SevOne GUI")
+cmdline.add_argument("--host", action = "store", default = config.get('sevone', 'host'), help = "Host (and port, if needed) to reach the SevOne REST API")
 cmdline.add_argument("object", action = "store", help = "Type of object to act upon, e.g. 'plugin' or 'auth'")
 cmdline.add_argument("action", action = "store", help = "Action to take, e.g. 'login' or 'get'")
-cmdline.add_argument("host", action = "store", help = "Host (and port, if needed) to reach the SevOne REST API")
 cmdline.add_argument("args", action = "store", nargs = argparse.REMAINDER, help = "Arguments to pass to API call")
 args = cmdline.parse_args()
 
@@ -36,4 +55,10 @@ func = actions[args.action]
 client = sevrest.SevOne('http://' + args.host + '/api/v1', token = args.token)
 result = getattr(client, func)(*args.args)
 print(json.dumps(result, indent = 4))
+
+if(func == 'auth'):
+	with open(CONFIG_FILE, 'w') as f:
+		config.set('sevone', 'host', args.host)
+		config.set('sevone', 'token', result['token'])
+		config.write(f)
 
