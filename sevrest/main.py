@@ -12,18 +12,19 @@ class SevOne:
 	def __init__(this, base_url, token = None, username = None, password = None):
 		this.base_url = base_url
 		if(token == None):
-			this.auth(username, password)
+			response = this.auth(username, password)
+			this.set_token(response['token'])
 		else:
 			this.set_token(token)
 
 	def auth(this, username, password):
 		response = this.request('POST', 'authentication/signin', {"name" : username, "password" : password})
-		this.set_token(response['token'])
+		return response
 
 	def set_token(this, token):
 		this.headers['X-Auth-Token'] = token
 
-	def get_plugins(this, sieve):
+	def get_plugins(this, sieve = None):
 		return this.search('GET', 'plugins', sieve)
 
 	def search(this, method, url, sieve = None, page = None, size = 50):
