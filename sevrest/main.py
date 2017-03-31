@@ -37,8 +37,8 @@ class SevOne:
 				response = this.search(url, method, page, sieve, size)
 				results.extend(response['content'])
 		else:
-			append = '&page=' + str(page) + '&size=' + str(size)
-			results = this.request('GET', url + append)
+			append = 'page=' + str(page) + '&size=' + str(size)
+			results = this.request('GET', url + ('&' if '?' in url else '?') + append)
 		return results
 
 	def request(this, method, url, body = None):
