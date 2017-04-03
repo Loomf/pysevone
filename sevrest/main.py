@@ -57,6 +57,6 @@ class SevOne:
 	def dict2qstr(this, dict_in):
 		if(dict_in == None or len(dict_in) == 0):
 			return ''
-		qstr = '?' + ''.join(['%s=%s&' % (urllib.quote(key, ''), urllib.quote(value, '')) for key, value in dict_in])
+		qstr = '?' + ''.join(['%s=%s&' % (urllib.quote(key, ''), urllib.quote(value, '')) for key, value in dict_in.items()])
 		return qstr[:-1]
 
