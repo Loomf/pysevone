@@ -27,6 +27,11 @@ class SevOne:
 	def get_plugins(this, sieve = None):
 		return this.search('GET', 'plugins', sieve)
 
+	def get_objecttypes(this, sieve = None):
+		if(sieve == None):
+			return this.search('GET', 'plugins/objecttypes')
+		return this.search('POST', 'plugins/objecttypes/filter', sieve)
+
 	def search(this, method, url, sieve = None, page = None, size = 50):
 		if(page == None):
 			page = 0

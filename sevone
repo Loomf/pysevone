@@ -18,6 +18,9 @@ command_map = {
 	},
 	"plugin" : {
 		"get" : "get_plugins"
+	},
+	"objecttype" : {
+		"get" : "get_objecttypes"
 	}
 }
 
