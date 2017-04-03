@@ -45,7 +45,7 @@ class SevOne:
 			if(sieve == None):
 				results = this.request('GET', url + ('&' if '?' in url else '?') + append)
 			else:
-				results = this.request('POST', url + '/filter' + ('&' if '?' in url else '?') + append, body = json.dumps(sieve))
+				results = this.request('POST', url + '/filter' + ('&' if '?' in url else '?') + append, body = sieve)
 		return results
 
 	def request(this, method, url, body = None):
