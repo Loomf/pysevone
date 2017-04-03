@@ -29,6 +29,14 @@ class DeviceDataTimestamp(util.CustomJSON):
 		for (k, v) in kwargs.items():
 			setattr(this, k, v)
 
+	def add_indicator(this, name, value):
+		if(name in this.indicators):
+			indicator = this.indicators[name]
+			indicator.value = value
+		else:
+			indicator = DeviceDataIndicator(name, value)
+			this.indicators[name] = indicator
+
 class DeviceDataObject(util.CustomJSON):
 	_jsonattrs = ['name', 'type', 'pluginId', 'pluginName', 'description', 'automaticCreation', 'timestamps:values']
 	name = None
@@ -51,6 +59,14 @@ class DeviceDataObject(util.CustomJSON):
 		for (k, v) in kwargs.items():
 			setattr(this, k, v)
 
+	def add_indicator(this, time, name, value):
+		if(time in this.timestamps):
+			timestamp = this.timestamps[time]
+		else:
+			timestamp = DeviceDataTimestamp(time)
+			this.timestamps[time] = timestamp
+		timestamp.add_indicator(name, value)
+
 class DeviceData(util.CustomJSON):
 	_jsonattrs = ['name', 'type', 'oldTs', 'newTs', 'ip', 'automaticCreation', 'sourceId', 'objects:values']
 	name = None
@@ -71,4 +87,20 @@ class DeviceData(util.CustomJSON):
 		this.source_id = source_id
 		for (k, v) in kwargs.items():
 			setattr(this, k, v)
+
+	def add_indicator(this, object_name, object_type, plugin_name, time, indicator_name, value):
+		if(object_name in this.objects):
+			obj = this.objects[object_name]
+		else:
+			obj = DeviceDataObject(object_name, object_type, plugin_name, this.automaticCreation)
+			this.objects[object_name] = obj
+		obj.add_indicator(time, indicator_name, value)
+
+	def resolve_timestamps(this):
+		for o in this.objects.values():
+			for t in o.timestamps.values():
+				if(t.timestamp < this.oldTs or this.oldTs == 0):
+					this.oldTs = t.timestamp
+				if(t.timestamp > this.newTs):
+					this.newTs = t.timestamp
 
