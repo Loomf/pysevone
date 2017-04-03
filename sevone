@@ -24,6 +24,12 @@ command_map = {
 	},
 	"indicatortype" : {
 		"get" : "get_indicatortypes"
+	},
+	"device" : {
+		"get" : "get_devices"
+	},
+	"object" : {
+		"get" : "get_objects"
 	}
 }
 

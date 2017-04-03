@@ -34,6 +34,13 @@ class SevOne:
 	def get_indicatortypes(this, sieve = None):
 		return this.search('plugins/indicatortypes', sieve)
 
+	def get_devices(this, sieve = None):
+		return this.search('devices', sieve)
+
+	def get_objects(this, sieve):
+		assert sieve != None
+		return this.search('devices/objects', sieve)
+
 	def search(this, url, sieve = None, page = None, size = 50):
 		if(page == None):
 			page = 0
