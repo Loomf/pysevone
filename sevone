@@ -21,6 +21,9 @@ command_map = {
 	},
 	"objecttype" : {
 		"get" : "get_objecttypes"
+	},
+	"indicatortype" : {
+		"get" : "get_indicatortypes"
 	}
 }
 
