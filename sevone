@@ -39,6 +39,7 @@ if(not config.has_option('sevone', 'token')):
 cmdline = argparse.ArgumentParser()
 cmdline.add_argument("--token", action = "store", default = config.get('sevone', 'token'), help = "Auth token (as returned by 'auth login' or generated via the SevOne GUI")
 cmdline.add_argument("--host", action = "store", default = config.get('sevone', 'host'), help = "Host (and port, if needed) to reach the SevOne REST API")
+cmdline.add_argument("--filter", "-f", action = "store", default = "", help = "A JSON filter to pass to REST API getters")
 cmdline.add_argument("object", action = "store", help = "Type of object to act upon, e.g. 'plugin' or 'auth'")
 cmdline.add_argument("action", action = "store", help = "Action to take, e.g. 'login' or 'get'")
 cmdline.add_argument("args", action = "store", nargs = argparse.REMAINDER, help = "Arguments to pass to API call")
@@ -54,9 +55,13 @@ if(args.action not in actions):
 	sys.exit(1)
 
 func = actions[args.action]
+try:
+	sieve = json.loads(args.filter)
+except:
+	sieve = None
 
 client = sevrest.SevOne('http://' + args.host + '/api/v1', token = args.token)
-result = getattr(client, func)(*args.args)
+result = getattr(client, func)(sieve, *args.args)
 print(json.dumps(result, indent = 4))
 
 if(func == 'auth'):
