@@ -5,7 +5,18 @@ class CustomJSON:
 		return {attr : this.get_attr(attr) for attr in this._jsonattrs}
 
 	def get_attr(this, attr):
-		obj = getattr(this, attr)
+		obj = None
+		if(':' in attr):
+			attr = attr.split(':', 2)
+			obj = getattr(this, attr[0])
+			if(hasattr(obj, attr[1])):
+				attr = getattr(obj, attr[1])
+				if(callable(attr)):
+					obj = attr()
+				else:
+					obj = attr
+		else:
+			obj = getattr(this, attr)
 		if(hasattr(obj, 'get_dict')):
 			return obj.get_dict()
 		elif(type(obj) == list):
