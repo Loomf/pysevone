@@ -11,22 +11,22 @@ class DeviceDataIndicator(util.CustomJSON):
 	maxValue = None
 
 class DeviceDataTimestamp(util.CustomJSON):
-	_jsonattrs = ['timestamp', 'indicators']
+	_jsonattrs = ['timestamp', 'indicators:values']
 	timestamp = 0
-	indicators = []
+	indicators = {}
 
 class DeviceDataObject(util.CustomJSON):
-	_jsonattrs = ['name', 'type', 'pluginId', 'pluginName', 'description', 'automaticCreation', 'timestamps']
+	_jsonattrs = ['name', 'type', 'pluginId', 'pluginName', 'description', 'automaticCreation', 'timestamps:values']
 	name = None
 	type = None
 	pluginId = None
 	pluginName = None
 	description = None
 	automaticCreation = False
-	timestamps = []
+	timestamps = {}
 
 class DeviceData(util.CustomJSON):
-	_jsonattrs = ['name', 'type', 'oldTs', 'newTs', 'ip', 'automaticCreation', 'sourceId', 'objects']
+	_jsonattrs = ['name', 'type', 'oldTs', 'newTs', 'ip', 'automaticCreation', 'sourceId', 'objects:values']
 	name = None
 	type = None
 	oldTs = 0
@@ -34,5 +34,5 @@ class DeviceData(util.CustomJSON):
 	ip = None
 	automaticCreation = False
 	sourceId = None
-	objects = []
+	objects = {}
 
