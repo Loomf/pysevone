@@ -1,6 +1,6 @@
 import json
 
-import util
+from . import util
 
 class DeviceDataIndicator(util.CustomJSON):
 	_jsonattrs = ['name', 'value', 'format', 'units', 'maxValue']
