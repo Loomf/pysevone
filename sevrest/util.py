@@ -1,3 +1,5 @@
+# This is here to be a base class, such that subclasses can specify which
+#    fields should be included when serialized to JSON
 class CustomJSON:
 	_jsonattrs = []
 
