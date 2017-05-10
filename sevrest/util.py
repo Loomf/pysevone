@@ -5,6 +5,12 @@ import json
 class CustomJSON(object):
 	_jsonattrs = []
 
+	def __init__(this, **kwargs):
+		for (k, v) in kwargs.items():
+			if(not hasattr(this, k)):
+				raise AttributeError(this.__class__.__name__ + ' does not have attribute "' + k + '"')
+			setattr(this, k, v)
+
 	def dumps(this):
 		return json.dumps(this.get_dict())
 
