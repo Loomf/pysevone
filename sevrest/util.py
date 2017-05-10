@@ -67,7 +67,9 @@ class CustomJSON(object):
 
 	def process_options(this, value, options):
 		if('omitempty' in options):
-			if(type(value) == int):
+			if(value == None):
+				raise NoValue()
+			elif(type(value) == int):
 				if(value == 0):
 					raise NoValue()
 			elif(type(value) == float):
@@ -76,10 +78,13 @@ class CustomJSON(object):
 			elif(type(value) == str):
 				if(value == ''):
 					raise NoValue()
+			elif(type(value) == tuple):
+				if(value == ()):
+					raise NoValue()
 			elif(type(value) == list):
 				if(len(value) == 0):
 					raise NoValue()
-			elif(type(vlaue) == dict):
+			elif(type(value) == dict):
 				if(len(value) == 0):
 					raise NoValue()
 		return value
