@@ -28,7 +28,7 @@ class DeviceDataTimestamp(util.CustomJSON):
 
 	def __init__(this, **kwargs):
 		if('indicators' in kwargs):
-			this.indicators = {i.name : DeviceDataIndicator(**i) if(type(i) == dict) else i for i in kwargs['indicators']}
+			this.indicators = {i['name'] if(type(i) == dict) else i.name : DeviceDataIndicator(**i) if(type(i) == dict) else i for i in kwargs['indicators']}
 			del kwargs['indicators']
 		super(this.__class__, this).__init__(**kwargs)
 
@@ -60,7 +60,7 @@ class DeviceDataObject(util.CustomJSON):
 
 	def __init__(this, **kwargs):
 		if('timestamps' in kwargs):
-			this.timestamps = {t.timestamp : DeviceDataTimestamp(**t) if(type(t) == dict) else t for t in kwargs['timestamps']}
+			this.timestamps = {t['timestamp'] if(type(t) == dict) else t.timestamp : DeviceDataTimestamp(**t) if(type(t) == dict) else t for t in kwargs['timestamps']}
 			del kwargs['timestamps']
 		super(this.__class__, this).__init__(**kwargs)
 
@@ -92,7 +92,7 @@ class DeviceData(util.CustomJSON):
 
 	def __init__(this, **kwargs):
 		if('objects' in kwargs):
-			this.objects = {o.name : DeviceDataObject(**o) if(type(o) == dict) else o for o in kwargs['objects']}
+			this.objects = {o['name'] if(type(o) == dict) else o.name : DeviceDataObject(**o) if(type(o) == dict) else o for o in kwargs['objects']}
 			del kwargs['objects']
 		super(this.__class__, this).__init__(**kwargs)
 
