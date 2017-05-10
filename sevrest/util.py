@@ -1,7 +1,12 @@
+import json
+
 # This is here to be a base class, such that subclasses can specify which
 #    fields should be included when serialized to JSON
 class CustomJSON:
 	_jsonattrs = []
+
+	def dumps(this):
+		return json.dumps(this.get_dict())
 
 	def get_dict(this):
 		this_dict = {}
