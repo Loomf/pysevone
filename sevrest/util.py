@@ -5,6 +5,15 @@ import json
 class CustomJSON(object):
 	_jsonattrs = []
 
+	@classmethod
+	def loads(cls, in_str):
+		obj = json.loads(in_str)
+		if(type(obj) == list):
+			return [cls(**o) for o in obj]
+		elif(type(obj) == dict):
+			return cls(**obj)
+		raise TypeError(cls.__name__ + '::loads() cannot handle JSON objects of type "' + type(obj).__name__ + '"')
+
 	def __init__(this, **kwargs):
 		for (k, v) in kwargs.items():
 			if(not hasattr(this, k)):
