@@ -2,6 +2,10 @@ import json
 import requests 
 import urllib
 
+from . import util
+
+from . import plugin
+
 class SevOne:
 	headers = {
 		'User-Agent' : 'sevrest/python/0.1',
@@ -26,13 +30,13 @@ class SevOne:
 		this.headers['X-Auth-Token'] = token
 
 	def get_plugins(this, sieve = None):
-		return this.search('plugins' + this.dict2qstr(sieve))
+		return this.search('plugins' + this.dict2qstr(sieve), cls = plugin.Plugin)
 
 	def get_objecttypes(this, sieve = None):
-		return this.search('plugins/objecttypes', sieve)
+		return this.search('plugins/objecttypes', sieve, cls = plugin.ObjectType)
 
 	def get_indicatortypes(this, sieve = None):
-		return this.search('plugins/indicatortypes', sieve)
+		return this.search('plugins/indicatortypes', sieve, cls = plugin.IndicatorType)
 
 	def get_devices(this, sieve = None):
 		return this.search('devices', sieve)
@@ -41,14 +45,14 @@ class SevOne:
 		assert sieve != None
 		return this.search('devices/objects', sieve)
 
-	def search(this, url, sieve = None, page = None, size = 50):
+	def search(this, url, sieve = None, page = None, size = 50, cls = None):
 		if(page == None):
 			page = 0
-			response = this.search(url, sieve, page, size)
+			response = this.search(url, sieve, page, size, cls)
 			results = response['content']
 			total_pages = response['totalPages']
 			for page in range(1, total_pages):
-				response = this.search(url, sieve, page, size)
+				response = this.search(url, sieve, page, size, cls)
 				results.extend(response['content'])
 		else:
 			append = 'page=' + str(page) + '&size=' + str(size)
@@ -56,6 +60,12 @@ class SevOne:
 				results = this.request('GET', url + ('&' if '?' in url else '?') + append)
 			else:
 				results = this.request('POST', url + '/filter' + ('&' if '?' in url else '?') + append, body = sieve)
+
+			if('status' in results and not(results['status'] >= 200 and results['status'] < 300)):
+				raise util.RESTException('%d %s:  %s' % (results['status'], results['title'], results['detail']))
+
+			results['content'] = cls.load(results['content'])
+
 		return results
 
 	def request(this, method, url, body = None):
