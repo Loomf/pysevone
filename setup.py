@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-	name = 'pysevone',
+	name = 'sevone',
 	version = '0.0.1',
 	author = 'Mike Cronce',
 	author_email = 'mcronce@sevone.com',
