@@ -24,9 +24,6 @@ class CustomJSON(object):
 				raise AttributeError(this.__class__.__name__ + ' does not have attribute "' + k + '"')
 			setattr(this, k, v)
 
-	def dumps(this):
-		return json.dumps(this.get_dict())
-
 	def get_dict(this):
 		this_dict = {}
 		for attr in this._jsonattrs:
