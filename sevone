@@ -71,7 +71,10 @@ except:
 
 client = sevrest.SevOne('http://' + args.host + '/api/v1', token = args.token)
 try:
-	result = getattr(client, func)(sieve, *args.args)
+	if(args.action == 'get'):
+		result = getattr(client, func)(sieve, *args.args)
+	else:
+		result = getattr(client, func)(*args.args)
 except sevrest.util.RESTException as e:
 	print(e)
 	sys.exit(1)
