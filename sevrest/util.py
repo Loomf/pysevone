@@ -96,3 +96,7 @@ class CustomJSON(object):
 class NoValue(Exception):
 	pass
 
+class JSONEncoder(json.JSONEncoder):
+	def default(self, o):
+		return o.get_dict()
+
