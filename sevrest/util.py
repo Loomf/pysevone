@@ -8,11 +8,15 @@ class CustomJSON(object):
 	@classmethod
 	def loads(cls, in_str):
 		obj = json.loads(in_str)
-		if(type(obj) == list):
-			return [cls(**o) for o in obj]
-		elif(type(obj) == dict):
-			return cls(**obj)
-		raise TypeError(cls.__name__ + '::loads() cannot handle JSON objects of type "' + type(obj).__name__ + '"')
+		return cls.load(obj)
+
+	@classmethod
+	def load(cls, in_obj):
+		if(type(in_obj) == list):
+			return [cls(**o) for o in in_obj]
+		elif(type(in_obj) == dict):
+			return cls(**in_obj)
+		raise TypeError(cls.__name__ + '::load() cannot handle JSON objects of type "' + type(in_obj).__name__ + '"')
 
 	def __init__(this, **kwargs):
 		for (k, v) in kwargs.items():
@@ -91,3 +95,4 @@ class CustomJSON(object):
 
 class NoValue(Exception):
 	pass
+
