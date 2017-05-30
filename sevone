@@ -41,7 +41,7 @@ except:
 if('sevone' not in config.sections()):
 	config.add_section('sevone')
 if(not config.has_option('sevone', 'host')):
-	config.set('sevone', 'host', None)
+	config.set('sevone', 'host', '')
 if(not config.has_option('sevone', 'token')):
 	config.set('sevone', 'token', '')
 
