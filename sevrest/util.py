@@ -1,4 +1,14 @@
 import json
+import texttable
+
+def print_table(arr):
+    keys = arr[0].keys()
+    table = texttable.Texttable(max_width = 0)
+    table.header(keys)
+    for row in arr:
+        row_out = [row[k] if(type(row[k]) in [str, int, float]) else json.dumps(row[k], indent = 4, cls = JSONEncoder) for k in keys]
+        table.add_row(row_out)
+    print(table.draw())
 
 # This is here to be a base class, such that subclasses can specify which
 #    fields should be included when serialized to JSON
@@ -23,6 +33,12 @@ class CustomJSON(object):
 			if(not hasattr(this, k)):
 				raise AttributeError(this.__class__.__name__ + ' does not have attribute "' + k + '"')
 			setattr(this, k, v)
+
+        def keys(this):
+            return [attr.split(',', 1)[0].split(':', 1)[0] for attr in this._jsonattrs]
+
+        def __getitem__(this, k):
+            return getattr(this, k)
 
 	def get_dict(this):
 		this_dict = {}
@@ -99,3 +115,4 @@ class NoValue(Exception):
 
 class RESTException(Exception):
 	pass
+
