@@ -15,7 +15,8 @@ setuptools.setup(
 	install_requires = [
 		'argparse',
 		'configparser',
-		'requests'
+		'requests',
+		'texttable'
 	],
 	packages = ['sevrest'],
 	scripts = ['sevone']
